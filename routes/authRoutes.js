@@ -1,6 +1,6 @@
 const express = require('express');
 const { check } = require('express-validator');
-const { registerUser, loginUser } = require('../controllers/authController');
+const { registerUser, loginUser, uploadProfileImage } = require('../controllers/authController');
 const { protect, admin } = require('../middlewares/authMiddleware');
 const multer = require('multer');
 const path = require('path');
