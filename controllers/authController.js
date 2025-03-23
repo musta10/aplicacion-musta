@@ -63,3 +63,23 @@ exports.loginUser = async (req, res) => {
         res.status(500).send('Server error');
     }
 };
+
+
+// Subir imagen de perfil
+exports.uploadProfileImage = async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ msg: 'Por favor sube una imagen' });
+        }
+
+        const user = await User.findById(req.user.id);
+
+        user.profileImage = req.file.path;  // Guardar la ruta de la imagen en el campo profileImage
+        await user.save();
+
+        res.json({ msg: 'Imagen subida correctamente', profileImage: user.profileImage });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send('Server error');
+    }
+};

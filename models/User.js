@@ -30,9 +30,13 @@ const UserSchema = new mongoose.Schema({
     enum: ["user", "admin"],
     default: "user",
   },
+  profileImage: {
+    type: String,
+    default: "",
+  },
 });
 
-// Método para encriptar la contraseña antes de guardarla
+// encripta la contraseña antes de guardarla
 UserSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   const salt = await bcrypt.genSalt(10);
