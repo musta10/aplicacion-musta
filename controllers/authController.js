@@ -83,21 +83,32 @@ exports.uploadProfileImage = async (req, res) => {
     }
 };
 
-// Subir imagen de perfil
-exports.uploadProfileImage = async (req, res) => {
+
+// Obtener todos los usuarios con paginación (solo para administradores)
+exports.getUsers = async (req, res) => {
     try {
-        if (!req.file) {
-            return res.status(400).json({ msg: 'Por favor sube una imagen' });
-        }
+        const page = parseInt(req.query.page) || 1; // Página actual
+        const limit = parseInt(req.query.limit) || 10; // Número de usuarios por página
 
-        const user = await User.findById(req.user.id);
+        const skip = (page - 1) * limit;
 
-        user.profileImage = req.file.path;  // Guardar la ruta de la imagen en el campo profileImage
-        await user.save();
+        // Obtener usuarios con paginación
+        const users = await User.find()
+            .select('-password') // Excluir el campo de contraseña
+            .skip(skip)
+            .limit(limit);
 
-        res.json({ msg: 'Imagen subida correctamente', profileImage: user.profileImage });
+        const totalUsers = await User.countDocuments(); // Contar total de usuarios
+        const totalPages = Math.ceil(totalUsers / limit); // Calcular páginas totales
+
+        res.json({
+            page,
+            totalPages,
+            totalUsers,
+            users
+        });
     } catch (error) {
-        console.error(error.message);
-        res.status(500).send('Server error');
+        console.error(error);
+        res.status(500).send('Error en el servidor');
     }
 };
