@@ -16,7 +16,7 @@ exports.registerUser = async (req, res) => {
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, age, country } = req.body;
 
     try {
         let user = await User.findOne({ email });
@@ -25,7 +25,7 @@ exports.registerUser = async (req, res) => {
             return res.status(400).json({ msg: 'El usuario ya existe' });
         }
 
-        user = new User({ name, email, password, role });
+        user = new User({ name, email, password, role , age , country });
 
         await user.save();
 
