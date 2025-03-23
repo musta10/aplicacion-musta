@@ -85,27 +85,39 @@ exports.uploadProfileImage = async (req, res) => {
 
 
 // Obtener todos los usuarios con paginación (solo para administradores)
+
 exports.getUsers = async (req, res) => {
     try {
-        const page = parseInt(req.query.page) || 1; // Página actual
-        const limit = parseInt(req.query.limit) || 10; // Número de usuarios por página
-
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
         const skip = (page - 1) * limit;
 
-        // Obtener usuarios con paginación
         const users = await User.find()
-            .select('-password') // Excluir el campo de contraseña
+            .select('-password') // Excluye el password
             .skip(skip)
             .limit(limit);
 
-        const totalUsers = await User.countDocuments(); // Contar total de usuarios
-        const totalPages = Math.ceil(totalUsers / limit); // Calcular páginas totales
+        const totalUsers = await User.countDocuments();
+
+        const formattedUsers = users.map(user => ({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            age: user.age,
+            country: user.country,
+            profileImage: user.profileImage,
+            createdAt: user.createdAt ? user.createdAt.toLocaleString('es-ES', { 
+                day: '2-digit', month: '2-digit', year: 'numeric', 
+                hour: '2-digit', minute: '2-digit', second: '2-digit' 
+            }) : 'Fecha no disponible'
+        }));
 
         res.json({
             page,
-            totalPages,
             totalUsers,
-            users
+            totalPages: Math.ceil(totalUsers / limit),
+            users: formattedUsers
         });
     } catch (error) {
         console.error(error);
