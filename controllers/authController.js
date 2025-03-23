@@ -63,7 +63,7 @@ exports.loginUser = async (req, res) => {
         res.status(500).send('Server error');
     }
 };
-
+// hay que verificar la ruta de la imagen con POSTMAN
 // Subir imagen de perfil
 exports.uploadProfileImage = async (req, res) => {
     try {
