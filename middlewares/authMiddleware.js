@@ -31,3 +31,12 @@ exports.admin = (req, res, next) => {
     }
     next();
 };
+
+// Middleware para verificar si el usuario es administrador
+exports.admin = (req, res, next) => {
+    if (req.user && req.user.role === 'admin') {
+        next();
+    } else {
+        res.status(403).json({ msg: 'Acceso denegado, solo para administradores' });
+    }
+};
