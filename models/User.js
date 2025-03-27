@@ -34,7 +34,12 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
-});
+  isOnline: {
+    type: Boolean,
+    default: false, // Por defecto, el usuario está offline
+  },
+},{ timestamps: true }); //timestamps para createdAt
+
 
 // encripta la contraseña antes de guardarla
 UserSchema.pre("save", async function (next) {

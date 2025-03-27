@@ -26,12 +26,22 @@ exports.createPost = async (req, res) => {
 exports.getUserPosts = async (req, res) => {
     try {
         const posts = await Post.find({ user: req.user.id }).sort({ publishedAt: -1 });
-        res.json(posts);
+
+        // Formatear la fecha antes de enviar la respuesta
+        const formattedPosts = posts.map(post => ({
+            _id: post._id,
+            title: post.title,
+            publishedAt: post.getFormattedDate(),
+            user: post.user
+        }));
+
+        res.json(formattedPosts);
     } catch (error) {
         console.error(error);
         res.status(500).send('Error en el servidor');
     }
 };
+
 
 // Editar una publicación (solo el dueño puede hacerlo)
 exports.updatePost = async (req, res) => {
