@@ -96,7 +96,7 @@ exports.uploadProfileImage = async (req, res) => {
 
     const user = await User.findById(req.user.id);
 
-    user.profileImage = req.file.path; // Guardar la ruta de la imagen en el campo profileImage
+    user.profileImage = req.file.path; // Guardar la ruta de la imagen
     await user.save();
 
     res.json({
@@ -105,9 +105,10 @@ exports.uploadProfileImage = async (req, res) => {
     });
   } catch (error) {
     console.error(error.message);
-    res.status(500).send("Server error");
+    res.status(500).send("Error en el servidor");
   }
 };
+
 
 // Obtener todos los usuarios con paginación (solo para administradores)
 exports.getUsers = async (req, res) => {

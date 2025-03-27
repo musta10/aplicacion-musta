@@ -38,7 +38,8 @@ const upload = multer({
 });
 
 // Ruta para subir la foto de perfil
-router.post('/uploadProfileImage', protect, upload.single('profileImage'), uploadProfileImage);
+router.post('/uploadProfileImage', protect, upload.single('image'), uploadProfileImage);
+//router.post('/uploadProfileImage', protect, upload.single('profileImage'), uploadProfileImage);
 
 
 // Registro de usuario
